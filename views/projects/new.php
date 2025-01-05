@@ -21,15 +21,23 @@
                                     <select name="id_place" id="place_p">
                                         <?php if (is_array($placeList)): ?>
                                             <?php foreach ($placeList as $place): ?>
-                                                <option value="<?php echo $place['id_place']; ?>">
-                                                    <?php echo $place['name_place']; ?>
-                                                </option>
+                                                <?php if (($place['id_place'] != 1) && ($place['id_place'] != 2)): ?>
+                                                    <option value="<?php echo $place['id_place']; ?>">
+                                                        <?php echo $place['name_place']; ?>
+                                                    </option>
+                                                <?php endif; ?>
                                             <?php endforeach; ?>
                                         <?php endif; ?>
                                     </select>
                                 </td>
                                 <td>
                                     <a href="/projects/new/addplace"><i class="fa fa-plus"></i></a>
+                                </td>
+                                <td style="width: 150px;">
+                                    <input type="submit" name="submit" class="btn btn-default" style="marging-left:30px;" value="Создать">
+                                </td>
+                                <td style="width: 150px;">
+                                    <input type="submit" name="submit" class="btn btn-default" style="marging-left:30px;" value="Отменить">
                                 </td>
                             </tr>
                         </table>

@@ -142,7 +142,8 @@
                         $returnList = array();
                         while ($row = mysqli_fetch_row($result)) {
                             $returnList[$i]['id_place'] = $row[0];
-                            $returnList[$i]['name_place'] = $row[1];
+                            $returnList[$i]['id_city'] = $row[1];
+                            $returnList[$i]['name_place'] = $row[2];
                             $i++;
                         }
                         break;

@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     01.12.2024 15:57:25                          */
+/* Created on:     04.01.2025 15:08:09                          */
 /*==============================================================*/
 
 
@@ -13,12 +13,6 @@ alter table SS_AT_ADM_USERS
 alter table SS_EQ 
    drop foreign key FK_SS_EQ_REFERENCE_SS_TYPE_;
 
-alter table SS_EQ_QUANTITY 
-   drop foreign key FK_SS_EQ_QU_REFERENCE_SS_ORDER;
-
-alter table SS_EQ_QUANTITY 
-   drop foreign key FK_SS_EQ_QU_REFERENCE_SS_EQ;
-
 alter table SS_INVENTORY 
    drop foreign key FK_SS_INVEN_REFERENCE_SS_SPR_C;
 
@@ -28,11 +22,17 @@ alter table SS_INV_EQ_CON
 alter table SS_INV_EQ_CON 
    drop foreign key FK_SS_INV_E_REFERENCE_SS_EQ;
 
-alter table SS_ORDER 
-   drop foreign key FK_SS_ORDER_REFERENCE_SS_SPR_P;
+alter table SS_PLACE_EQ_CON 
+   drop foreign key FK_SS_PLACE_REFERENCE_SS_EQ;
 
-alter table SS_ORDER 
-   drop foreign key FK_SS_ORDER_REFERENCE_SS_SPR_C;
+alter table SS_PLACE_EQ_CON 
+   drop foreign key FK_SS_PLACE_REFERENCE_SS_SPR_P;
+
+alter table SS_PLACE_EQ_CON 
+   drop foreign key FK_SS_PLACE_REFERENCE_SS_PROJE;
+
+alter table SS_PROJECTS 
+   drop foreign key FK_SS_PROJE_REFERENCE_SS_SPR_P;
 
 alter table SS_SPR_PLACE 
    drop foreign key FK_SS_SPR_P_REFERENCE_SS_SPR_C;
@@ -64,15 +64,6 @@ alter table SS_EQ
 
 drop table if exists SS_EQ;
 
-
-alter table SS_EQ_QUANTITY 
-   drop foreign key FK_SS_EQ_QU_REFERENCE_SS_ORDER;
-
-alter table SS_EQ_QUANTITY 
-   drop foreign key FK_SS_EQ_QU_REFERENCE_SS_EQ;
-
-drop table if exists SS_EQ_QUANTITY;
-
 drop index DATE_INVENTORY_IDX on SS_INVENTORY;
 
 
@@ -90,20 +81,33 @@ alter table SS_INV_EQ_CON
 
 drop table if exists SS_INV_EQ_CON;
 
-drop index ORD_DATE_IDX on SS_ORDER;
+
+alter table SS_PLACE_EQ_CON 
+   drop foreign key FK_SS_PLACE_REFERENCE_SS_EQ;
+
+alter table SS_PLACE_EQ_CON 
+   drop foreign key FK_SS_PLACE_REFERENCE_SS_SPR_P;
+
+alter table SS_PLACE_EQ_CON 
+   drop foreign key FK_SS_PLACE_REFERENCE_SS_PROJE;
+
+drop table if exists SS_PLACE_EQ_CON;
+
+drop index ORD_DATE_IDX on SS_PROJECTS;
+
+drop index NAME_PROJECT_IDX on SS_PROJECTS;
 
 
-alter table SS_ORDER 
-   drop foreign key FK_SS_ORDER_REFERENCE_SS_SPR_P;
+alter table SS_PROJECTS 
+   drop foreign key FK_SS_PROJE_REFERENCE_SS_SPR_P;
 
-alter table SS_ORDER 
-   drop foreign key FK_SS_ORDER_REFERENCE_SS_SPR_C;
-
-drop table if exists SS_ORDER;
+drop table if exists SS_PROJECTS;
 
 drop index NAME_CITY_IDX on SS_SPR_CITY;
 
 drop table if exists SS_SPR_CITY;
+
+drop index NAME_PLACE_ID_CITY_IDX on SS_SPR_PLACE;
 
 drop index NAME_PLACE_IDX on SS_SPR_PLACE;
 
@@ -198,17 +202,6 @@ create index NAME_EQ_IDX on SS_EQ
 );
 
 /*==============================================================*/
-/* Table: SS_EQ_QUANTITY                                        */
-/*==============================================================*/
-create table SS_EQ_QUANTITY
-(
-   ID_ORDER             int  comment '',
-   ID_EQ                int  comment '',
-   EQ_QUANTITY          float  comment '',
-   EQ_PLACE_FLAG        char(1)  comment ''
-);
-
-/*==============================================================*/
 /* Table: SS_INVENTORY                                          */
 /*==============================================================*/
 create table SS_INVENTORY
@@ -239,23 +232,42 @@ create table SS_INV_EQ_CON
 );
 
 /*==============================================================*/
-/* Table: SS_ORDER                                              */
+/* Table: SS_PLACE_EQ_CON                                       */
 /*==============================================================*/
-create table SS_ORDER
+create table SS_PLACE_EQ_CON
 (
-   ID_ORDER             int not null  comment '',
+   ID_EQ                int  comment '',
    ID_PLACE             int  comment '',
-   ID_CITY              int  comment '',
+   ID_PROJECT           int  comment '',
+   EQ_QUANTITY          float  comment ''
+);
+
+/*==============================================================*/
+/* Table: SS_PROJECTS                                           */
+/*==============================================================*/
+create table SS_PROJECTS
+(
+   ID_PROJECT           int not null  comment '',
+   ID_PLACE             int  comment '',
+   NAME_PROJECT         varchar(255)  comment '',
    ORD_DATE             date  comment '',
    END_DATE             date  comment '',
    FLAG_ORD             char(1)  comment '',
-   primary key (ID_ORDER)
+   primary key (ID_PROJECT)
+);
+
+/*==============================================================*/
+/* Index: NAME_PROJECT_IDX                                      */
+/*==============================================================*/
+create index NAME_PROJECT_IDX on SS_PROJECTS
+(
+   NAME_PROJECT
 );
 
 /*==============================================================*/
 /* Index: ORD_DATE_IDX                                          */
 /*==============================================================*/
-create index ORD_DATE_IDX on SS_ORDER
+create index ORD_DATE_IDX on SS_PROJECTS
 (
    ORD_DATE
 );
@@ -298,6 +310,15 @@ create index NAME_PLACE_IDX on SS_SPR_PLACE
 );
 
 /*==============================================================*/
+/* Index: NAME_PLACE_ID_CITY_IDX                                */
+/*==============================================================*/
+create unique index NAME_PLACE_ID_CITY_IDX on SS_SPR_PLACE
+(
+   ID_CITY,
+   NAME_PLACE
+);
+
+/*==============================================================*/
 /* Table: SS_TYPE_EQ                                            */
 /*==============================================================*/
 create table SS_TYPE_EQ
@@ -324,12 +345,6 @@ alter table SS_AT_ADM_USERS add constraint FK_SS_AT_AD_REFERENCE_SS_SPR_C foreig
 alter table SS_EQ add constraint FK_SS_EQ_REFERENCE_SS_TYPE_ foreign key (ID_TYPE)
       references SS_TYPE_EQ (ID_TYPE) on delete restrict on update restrict;
 
-alter table SS_EQ_QUANTITY add constraint FK_SS_EQ_QU_REFERENCE_SS_ORDER foreign key (ID_ORDER)
-      references SS_ORDER (ID_ORDER) on delete restrict on update restrict;
-
-alter table SS_EQ_QUANTITY add constraint FK_SS_EQ_QU_REFERENCE_SS_EQ foreign key (ID_EQ)
-      references SS_EQ (ID_EQ) on delete restrict on update restrict;
-
 alter table SS_INVENTORY add constraint FK_SS_INVEN_REFERENCE_SS_SPR_C foreign key (ID_CITY)
       references SS_SPR_CITY (ID_CITY) on delete restrict on update restrict;
 
@@ -339,11 +354,17 @@ alter table SS_INV_EQ_CON add constraint FK_SS_INV_E_REFERENCE_SS_INVEN foreign 
 alter table SS_INV_EQ_CON add constraint FK_SS_INV_E_REFERENCE_SS_EQ foreign key (ID_EQ)
       references SS_EQ (ID_EQ) on delete restrict on update restrict;
 
-alter table SS_ORDER add constraint FK_SS_ORDER_REFERENCE_SS_SPR_P foreign key (ID_PLACE)
+alter table SS_PLACE_EQ_CON add constraint FK_SS_PLACE_REFERENCE_SS_EQ foreign key (ID_EQ)
+      references SS_EQ (ID_EQ) on delete restrict on update restrict;
+
+alter table SS_PLACE_EQ_CON add constraint FK_SS_PLACE_REFERENCE_SS_SPR_P foreign key (ID_PLACE)
       references SS_SPR_PLACE (ID_PLACE) on delete restrict on update restrict;
 
-alter table SS_ORDER add constraint FK_SS_ORDER_REFERENCE_SS_SPR_C foreign key (ID_CITY)
-      references SS_SPR_CITY (ID_CITY) on delete restrict on update restrict;
+alter table SS_PLACE_EQ_CON add constraint FK_SS_PLACE_REFERENCE_SS_PROJE foreign key (ID_PROJECT)
+      references SS_PROJECTS (ID_PROJECT) on delete restrict on update restrict;
+
+alter table SS_PROJECTS add constraint FK_SS_PROJE_REFERENCE_SS_SPR_P foreign key (ID_PLACE)
+      references SS_SPR_PLACE (ID_PLACE) on delete restrict on update restrict;
 
 alter table SS_SPR_PLACE add constraint FK_SS_SPR_P_REFERENCE_SS_SPR_C foreign key (ID_CITY)
       references SS_SPR_CITY (ID_CITY) on delete restrict on update restrict;

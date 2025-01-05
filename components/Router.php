@@ -11,7 +11,7 @@
         // метод возвращает строку запроса uri
         private function getURI() {
             if(!empty($_SERVER['REQUEST_URI'])) {
-                // echo $_SERVER['REQUEST_URI'] . '<br>';
+                //echo $_SERVER['REQUEST_URI'] . '<br>';
                 return trim($_SERVER['REQUEST_URI'], '/');
             }
         }

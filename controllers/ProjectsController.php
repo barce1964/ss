@@ -6,6 +6,20 @@
 
             $placeList = Place::getListPlace();
 
+            if (isset($_POST['submit'])) {
+                if ($_POST['submit'] == 'Создать') {
+                    $options['id_place'] = $_POST['id_place'];
+                    $options['name_project'] = $_POST['nameP'];
+                    $options['date_ord'] = $_POST['dateP'];
+                    Projects::addProject($options);
+                    $id = Projects::getLastLine();
+                    header("location: /projects/ord/$id/1");
+                }
+                if ($_POST['submit'] == 'Отменить') {
+                    header("location: /");
+                }    
+            }
+            
             require_once(ROOT . '/views/projects/new.php');
             return true;
 
@@ -24,6 +38,11 @@
             return true;
         }
         
+        public function actionOrd() {
+            require_once(ROOT . '/views/projects/ord.php');
+            return true;
+        }
+
         public function actionTours() {
 
             require_once(ROOT . '/views/projects/tours.php');

@@ -6,7 +6,7 @@
 
             $db = new DB;
             $sql = "INSERT INTO ss_spr_place (id_city, name_place) VALUES ($id_city, " . "'" . $place . "')";
-            echo $sql;
+            
             $db->insertRowToDB($sql);
         }
 
@@ -15,7 +15,7 @@
 
             $db = new DB;
 
-            $sql = "SELECT id_place, name_place FROM ss_spr_place WHERE id_city = " . $_SESSION['city'];
+            $sql = "SELECT id_place, id_city, name_place FROM ss_spr_place WHERE id_city = " . $_SESSION['city'];
             return $db->executeQry($sql, 13);
         }
     }

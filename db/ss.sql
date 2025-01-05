@@ -326,6 +326,15 @@ create index NAME_PLACE_IDX on SS_SPR_PLACE
 );
 
 /*==============================================================*/
+/* Index: NAME_PLACE_ID_CITY_IDX                                */
+/*==============================================================*/
+create unique index NAME_PLACE_ID_CITY_IDX on SS_SPR_PLACE
+(
+   ID_CITY,
+   NAME_PLACE
+);
+
+/*==============================================================*/
 /* Table: SS_TYPE_EQ                                            */
 /*==============================================================*/
 create table SS_TYPE_EQ
