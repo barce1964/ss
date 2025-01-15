@@ -5,12 +5,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="">
-        <link rel="icon" href="../../images/ico/favicon.png" type="image/x-icon">
-        <link href="../../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../../css/font-awesome.min.css" rel="stylesheet">
-        <link href="../../css/main.css" rel="stylesheet">
-        <script src="../../js/bootstrap.min.js" defer></script>
-        <script src="../../js/bootstrap.bundle.min.js" defer></script>
+        <link rel="icon" href="/images/ico/favicon.png" type="image/x-icon">
+        <link href="/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/css/font-awesome.min.css" rel="stylesheet">
+        <link href="/css/main.css" rel="stylesheet">
+        <script src="/js/bootstrap.min.js" defer></script>
+        <script src="/js/bootstrap.bundle.min.js" defer></script>
         <title>Show Screen</title>
     </head>
 
@@ -58,7 +58,7 @@
                                                         <?php if (($_SESSION['adm'] == 1) || ($_SESSION['skl'] == 1)): ?>
                                                             <li>
                                                                 <a href="/projects/tours"><i class="fa fa-arrows-alt" aria-hidden="true"></i>
-                                                                    Переместить на другой склад
+                                                                    Перемещение
                                                                 </a>
                                                             </li>
                                                         <?php endif; ?>

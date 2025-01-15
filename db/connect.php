@@ -148,7 +148,40 @@
                         }
                         break;
     
-    
+                    case 14:
+                        $returnList = array();
+                        while ($row = mysqli_fetch_row($result)) {
+                            $returnList[$i]['id_eq'] = $row[0];
+                            $returnList[$i]['id_type'] = $row[1];
+                            $returnList[$i]['name_eq'] = $row[2];
+                            $returnList[$i]['eq_quantity'] = $row[3];
+                            $returnList[$i]['eq_units'] = $row[4];
+                            $returnList[$i]['id_place'] = $row[5];
+                            $i++;
+                        }
+                        break;
+        
+                    case 15:
+                        $returnList = array();
+                        while ($row = mysqli_fetch_row($result)) {
+                            $returnList[$i]['id_project'] = $row[0];
+                            $returnList[$i]['name_place'] = $row[1];
+                            $returnList[$i]['name_project'] = $row[2];
+                            $returnList[$i]['ord_date'] = $row[3];
+                            $i++;
+                        }
+                        break;
+                        
+                    case 16:
+                        $returnList = array();
+                        while ($row = mysqli_fetch_row($result)) {
+                            $returnList[$i]['name_eq'] = $row[0];
+                            $returnList[$i]['eq_quantity'] = $row[1];
+                            $returnList[$i]['eq_units'] = $row[2];
+                            $i++;
+                        }
+                        break;
+
                 default:
                     # code...
                     break;

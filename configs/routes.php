@@ -30,6 +30,7 @@
         // Проекты
         'projects/new/addplace' => 'projects/addplace',
         'projects/new' => 'projects/new',
+        'projects/ready/([0-9]+)' => 'projects/ready/$1',
         'projects/ord/([0-9]+)/([0-9]+)' => 'projects/ord/$1/$2',
         'projects/tours' => 'projects/tours',
         // Главная страница

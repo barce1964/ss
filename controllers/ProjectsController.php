@@ -38,8 +38,42 @@
             return true;
         }
         
-        public function actionOrd() {
+        public function actionOrd($id_ord, $id_type) {
+            $typeList = Type::getTypeList();
+            $eqList = Projects::getListEqByType($id_type);
+            $maxIdEq = Projects::getMaxIdEq();
+            if (isset($_POST['submit'])) {
+                if($_POST['submit'] == "Сохранить") {
+                    for ($i = 1; $i <= $maxIdEq; $i++) {
+                        if ((isset($_POST["quantity$i"])) && ($_POST["quantity$i"] != '')) {
+                            $options['id_prj'] = $id_ord;
+                            $options['id_eq'] = $i;
+                            $options['eq_quantity'] = $_POST["quantity$i"];
+                            Projects::addEqInPrj($options);
+                        }
+                    }
+                }
+                if($_POST['submit'] == "Закончить") {
+                    for ($i = 1; $i <= $maxIdEq; $i++) {
+                        if ((isset($_POST["quantity$i"])) && ($_POST["quantity$i"] != '')) {
+                            $options['id_prj'] = $id_ord;
+                            $options['id_eq'] = $i;
+                            $options['eq_quantity'] = $_POST["quantity$i"];
+                            Projects::addEqInPrj($options);
+                        }
+                    }
+                    Projects::rPrj($id_ord);
+                    header("location: /projects/ready/$id_ord");
+                }
+            }
             require_once(ROOT . '/views/projects/ord.php');
+            return true;
+        }
+
+        public function actionReady($id_ord) {
+            $prjList = Projects::getPrjList();
+            $prjDetail = Projects::getPrjDetail($id_ord);
+            require_once(ROOT . '/views/projects/ready.php');
             return true;
         }
 
